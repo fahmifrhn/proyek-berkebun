@@ -1,0 +1,126 @@
+{% extends 'kebun/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ tanaman.nama }} ({{ tanaman.varietas }})</h4>
+                <div>
+                    <a href="{% url 'tanaman-update' tanaman.pk %}" class="btn btn-outline-primary btn-sm">✏️ Edit</a>
+                    <a href="{% url 'tanaman-delete' tanaman.pk %}" class="btn btn-outline-danger btn-sm">🗑️ Hapus</a>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Lokasi:</strong> {{ tanaman.lokasi_tanam }}</li>
+                <li class="list-group-item"><strong>Status:</strong> <span class="badge bg-info">{{ tanaman.status_pertumbuhan }}</span></li>
+                <li class="list-group-item"><strong>Kebutuhan:</strong> {{ tanaman.catatan_kebutuhan }}</li>
+                <li class="list-group-item"><strong>Tanggal Tanam:</strong> {{ tanaman.tanggal_tanam }}</li>
+            </ul>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🏆 Hasil Panen</h5>
+                <a href="{% url 'panen-create' tanaman.pk %}" class="btn btn-success btn-sm">+ Tambah</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for panen in tanaman.hasil_panen.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ panen.tanggal_panen }}: {{ panen.jumlah }} {{ panen.satuan }}
+                    <div>
+                        <a href="{% url 'panen-update' panen.pk %}" class="btn btn-outline-secondary btn-sm py-0 px-1">✏️</a>
+                        <a href="{% url 'panen-delete' panen.pk %}" class="btn btn-outline-danger btn-sm py-0 px-1">🗑️</a>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted">Belum ada hasil panen.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">📝 Catatan Perawatan</h5>
+                <a href="{% url 'catatan-create' tanaman.pk %}" class="btn btn-success btn-sm">+ Tambah</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for catatan in tanaman.catatan_perawatan.all %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>{{ catatan.tanggal|date:"d M Y H:i" }}:</strong> {{ catatan.aktivitas }}
+                                {% if catatan.foto_perkembangan %}
+                                    <br><a href="{{ catatan.foto_perkembangan.url }}" target="_blank">(Lihat Foto)</a>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <a href="{% url 'catatan-update' catatan.pk %}" class="btn btn-outline-secondary btn-sm py-0 px-1">✏️</a>
+                                <a href="{% url 'catatan-delete' catatan.pk %}" class="btn btn-outline-danger btn-sm py-0 px-1">🗑️</a>
+                            </div>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">Belum ada catatan perawatan.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🗓️ Jadwal Kegiatan</h5>
+                <a href="{% url 'jadwal-create' tanaman.pk %}" class="btn btn-success btn-sm">+ Tambah</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for jadwal in tanaman.jadwal_kegiatan.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{ jadwal.tanggal_jadwal }}: {{ jadwal.jenis_kegiatan }}
+                    </div>
+                    <div>
+                        <button 
+                            class="btn btn-sm toggle-selesai-btn {% if jadwal.selesai %}btn-success{% else %}btn-outline-secondary{% endif %}"
+                            data-jadwal-id="{{ jadwal.pk }}">
+                            {{ jadwal.selesai|yesno:"Selesai,Belum" }}
+                        </button>
+                        <a href="{% url 'jadwal-update' jadwal.pk %}" class="btn btn-outline-secondary btn-sm py-0 px-1">✏️</a>
+                        <a href="{% url 'jadwal-delete' jadwal.pk %}" class="btn btn-outline-danger btn-sm py-0 px-1">🗑️</a>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted">Belum ada jadwal kegiatan.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🐛 Masalah Tanaman</h5>
+                <a href="{% url 'masalah-create' tanaman.pk %}" class="btn btn-success btn-sm">+ Tambah</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for masalah in tanaman.catatan_masalah.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{ masalah.tanggal_ditemukan }}: {{ masalah.deskripsi_masalah|truncatewords:10 }}
+                        <span class="badge bg-success">{{ masalah.berhasil|yesno:"Berhasil,Belum" }}</span>
+                    </div>
+                    <div>
+                        <a href="{% url 'masalah-update' masalah.pk %}" class="btn btn-outline-secondary btn-sm py-0 px-1">✏️</a>
+                        <a href="{% url 'masalah-delete' masalah.pk %}" class="btn btn-outline-danger btn-sm py-0 px-1">🗑️</a>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-muted">Tidak ada masalah tercatat.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

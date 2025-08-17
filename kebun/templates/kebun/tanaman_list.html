@@ -1,0 +1,28 @@
+{% extends 'kebun/base.html' %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="h4 mb-0">🌿 Daftar Tanaman Saya</h2>
+        <a href="{% url 'tanaman-create' %}" class="btn btn-success">+ Tambah Tanaman</a>
+    </div>
+
+    <div class="card-body p-0">
+        {% if daftar_tanaman %}
+            <div class="list-group list-group-flush">
+                {% for tanaman in daftar_tanaman %}
+                    <a href="{{ tanaman.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ tanaman.nama }} ({{ tanaman.varietas }})</h5>
+                            <small class="text-muted">Lokasi: {{ tanaman.lokasi_tanam }}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ tanaman.status_pertumbuhan }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-muted p-4">Anda belum menambahkan tanaman apapun. Silakan klik tombol "+ Tambah Tanaman" di atas untuk memulai.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

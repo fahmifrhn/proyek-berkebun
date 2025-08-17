@@ -1,0 +1,18 @@
+{% extends 'kebun/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">🏆 Tambah Data Panen untuk {{ tanaman.nama }}</h2>
+                <hr>
+                
+                {% crispy form %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

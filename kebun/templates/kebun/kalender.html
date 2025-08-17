@@ -1,0 +1,47 @@
+{% extends 'kebun/base.html' %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2 class="h4 mb-0">🗓️ Kalender Jadwal Perawatan</h2>
+    </div>
+    <div class="card-body">
+        <p class="text-muted">Klik pada sebuah acara untuk melihat detail tanaman.</p>
+        
+        <div id='calendar'></div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/locales/id.global.min.js'></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      // 3. Atur bahasa kalender ke 'id' untuk Bahasa Indonesia
+      locale: 'id',
+
+      initialView: 'dayGridMonth', 
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,listWeek'
+      },
+      events: "{% url 'semua-jadwal-json' %}",
+      eventClick: function(info) {
+        info.jsEvent.preventDefault(); 
+        if (info.event.url) {
+          window.open(info.event.url, "_self");
+        }
+      }
+    });
+    
+    calendar.render();
+  });
+</script>
+{% endblock %}

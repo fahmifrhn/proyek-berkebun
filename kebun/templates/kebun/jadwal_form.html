@@ -1,0 +1,22 @@
+{% extends 'kebun/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if object %}
+                    <h2 class="card-title">✏️ Edit Jadwal Kegiatan</h2>
+                {% else %}
+                    <h2 class="card-title">🗓️ Tambah Jadwal untuk {{ tanaman.nama }}</h2>
+                {% endif %}
+                <hr>
+                
+                {% crispy form %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

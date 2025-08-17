@@ -1,0 +1,17 @@
+{% extends 'kebun/base.html' %}
+{% load crispy_forms_tags %}  {% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% if object %}
+            <h2 class="card-title">✏️ Edit Tanaman</h2>
+        {% else %}
+            <h2 class="card-title">🌿 Tambah Tanaman Baru</h2>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}  <button type="submit" class="btn btn-success mt-3">Simpan</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

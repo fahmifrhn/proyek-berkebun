@@ -1,0 +1,11 @@
+{% extends 'kebun/base.html' %}
+
+{% block content %}
+    <h1>Konfirmasi Hapus</h1>
+    <p>Apakah Anda yakin ingin menghapus "{{ object }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Ya, Hapus</button>
+        <a href="{{ request.META.HTTP_REFERER }}">Batal</a>
+    </form>
+{% endblock %}
